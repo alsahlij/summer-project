@@ -1,9 +1,10 @@
+import javax.swing.*;
 /**
  * Main entry point for Snow Problem game.
- * This class launches the application.
+ * Launches the game window.
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Snow Problem - Starting...");
+        SwingUtilities.invokeLater(() -> new GameWindow());
     }
 }
