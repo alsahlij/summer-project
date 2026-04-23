@@ -61,4 +61,50 @@ public class GameBoard {
     public void clearBoard() {
         pieces.clear();
     }
+
+    /**
+     * Moves a piece in the given direction.
+     * 0=UP, 1=DOWN, 2=LEFT, 3=RIGHT
+     * Returns false if the piece goes off the board.
+     */
+    public boolean movePiece(Piece piece, int direction) {
+
+        // Non-movable pieces
+        if (piece.getType() == PieceType.TREE) return true;
+        if (piece.getType() == PieceType.HEAD) return true;
+        if (piece.isStacked()) return true;
+
+        int dRow = 0;
+        int dCol = 0;
+
+        // Direction handling
+        if (direction == 0) dRow = -1;
+        if (direction == 1) dRow =  1;
+        if (direction == 2) dCol = -1;
+        if (direction == 3) dCol =  1;
+
+        int newRow = piece.getRow() + dRow;
+        int newCol = piece.getCol() + dCol;
+
+        // Slide until blocked or out of bounds
+        while (true) {
+
+            // Out of board  remove piece
+            if (newRow < 0 || newRow >= ROWS || newCol < 0 || newCol >= COLS) {
+                removePiece(piece);
+                return false;
+            }
+
+            Piece occupant = getPieceAt(newRow, newCol);
+            if (occupant != null) {
+                // Stop before collision
+                piece.setRow(newRow - dRow);
+                piece.setCol(newCol - dCol);
+                return true;
+            }
+
+            newRow += dRow;
+            newCol += dCol;
+        }
+    }
 }
