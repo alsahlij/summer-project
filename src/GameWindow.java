@@ -2,7 +2,6 @@ import javax.swing.*;
 
 /**
  * The main application window for Snow Problem.
- * Sets up the JFrame and holds the GamePanel.
  */
 public class GameWindow extends JFrame {
 
@@ -19,10 +18,10 @@ public class GameWindow extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+        gamePanel.requestFocusInWindow();
     }
 
     public static void main(String[] args) {
-        // Run GUI on the Event Dispatch Thread - standard Java Swing practice
         SwingUtilities.invokeLater(() -> new GameWindow());
     }
 }

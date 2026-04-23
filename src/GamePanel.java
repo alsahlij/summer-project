@@ -7,8 +7,9 @@ import java.util.Map;
 /**
  * Main panel for rendering the board and handling mouse input.
  * First click selects a snowball, second click chooses direction.
+ * Keyboard: R = restart, N = next level, P = previous level.
  */
-public class GamePanel extends JPanel implements MouseListener {
+public class GamePanel extends JPanel implements MouseListener, KeyListener {
 
     public static final int CELL_SIZE = 100;
 
@@ -22,6 +23,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private boolean gameOver;
     private boolean gameWon;
     private int currentLevel;
+    private int moveCount;
 
     public GamePanel() {
         setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + INFO_HEIGHT));
@@ -30,16 +32,19 @@ public class GamePanel extends JPanel implements MouseListener {
         images = new HashMap<>();
         loadImages();
 
-        currentLevel = 1;
-        gameOver     = false;
-        gameWon      = false;
+        currentLevel  = 1;
+        moveCount     = 0;
+        gameOver      = false;
+        gameWon       = false;
         selectedPiece = null;
 
         board = new GameBoard();
         LevelLoader.loadLevel(board, currentLevel);
 
         addMouseListener(this);
+        addKeyListener(this);
         setFocusable(true);
+        requestFocusInWindow();
     }
 
     // Load all game images once
@@ -116,24 +121,29 @@ public class GamePanel extends JPanel implements MouseListener {
         // Info bar
         g.setColor(Color.WHITE);
         g.fillRect(0, BOARD_HEIGHT, BOARD_WIDTH, INFO_HEIGHT);
+
+        // Draw level and moves
         g.setColor(Color.DARK_GRAY);
         g.setFont(new Font("Arial", Font.BOLD, 18));
+        g.drawString("Level: " + currentLevel, 20, BOARD_HEIGHT + 38);
+        g.drawString("Moves: " + moveCount,   170, BOARD_HEIGHT + 38);
 
         // Status messages
+        g.setFont(new Font("Arial", Font.PLAIN, 13));
         if (gameOver) {
-            drawMessage(g, "Game Over! Snowball fell off! Click to restart.", Color.RED);
-            g.drawString("Level: " + currentLevel, 20, BOARD_HEIGHT + 35);
+            drawMessage(g, "Game Over! Snowball fell off!", Color.RED);
+            g.setColor(Color.DARK_GRAY);
+            g.drawString("R = Restart", 330, BOARD_HEIGHT + 38);
         } else if (gameWon) {
             drawMessage(g, "You Win! Well done!", new Color(0, 150, 0));
-            g.drawString("Level: " + currentLevel, 20, BOARD_HEIGHT + 35);
+            g.setColor(new Color(0, 130, 0));
+            g.drawString("R = Restart  |  N = Next Level", 290, BOARD_HEIGHT + 38);
         } else if (selectedPiece != null) {
-            g.drawString("Level: " + currentLevel, 20, BOARD_HEIGHT + 35);
-            g.setFont(new Font("Arial", Font.PLAIN, 14));
-            g.drawString("Now click a direction to move", 180, BOARD_HEIGHT + 38);
+            g.setColor(Color.DARK_GRAY);
+            g.drawString("Click a direction to move  |  R = Restart", 270, BOARD_HEIGHT + 38);
         } else {
-            g.drawString("Level: " + currentLevel, 20, BOARD_HEIGHT + 35);
-            g.setFont(new Font("Arial", Font.PLAIN, 14));
-            g.drawString("Click a snowball to select it", 180, BOARD_HEIGHT + 38);
+            g.setColor(Color.DARK_GRAY);
+            g.drawString("Click a snowball to select  |  R = Restart", 270, BOARD_HEIGHT + 38);
         }
     }
 
@@ -151,13 +161,13 @@ public class GamePanel extends JPanel implements MouseListener {
     // Mouse Input
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Restart after game over
-        if (gameOver) {
+        // Always re-grab focus on click
+        requestFocusInWindow();
+
+        if (gameOver || gameWon) {
             restartLevel();
             return;
         }
-
-        if (gameWon) return;
 
         int col = e.getX() / CELL_SIZE;
         int row = e.getY() / CELL_SIZE;
@@ -198,7 +208,7 @@ public class GamePanel extends JPanel implements MouseListener {
             return;
         }
 
-        int direction = -1;
+        int direction;
         if (Math.abs(dRow) >= Math.abs(dCol)) {
             direction = (dRow > 0) ? 1 : 0;
         } else {
@@ -207,6 +217,7 @@ public class GamePanel extends JPanel implements MouseListener {
 
         boolean success = board.movePiece(selectedPiece, direction);
         selectedPiece = null;
+        moveCount++;
 
         if (!success) {
             gameOver = true;
@@ -219,19 +230,62 @@ public class GamePanel extends JPanel implements MouseListener {
         }
     }
 
-    // Reset current level state.
-    private void restartLevel() {
-        gameOver = false;
-        gameWon  = false;
+    // Keyboard Input
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_R) {
+            restartLevel();
+        }
+
+        if (key == KeyEvent.VK_N) {
+            nextLevel();
+        }
+
+        if (key == KeyEvent.VK_P) {
+            previousLevel();
+        }
+    }
+
+    // Reset current level state
+    public void restartLevel() {
+        gameOver      = false;
+        gameWon       = false;
         selectedPiece = null;
+        moveCount     = 0;
         LevelLoader.loadLevel(board, currentLevel);
         repaint();
     }
 
+
+    // Advances to the next level if available.
+    public void nextLevel() {
+        if (currentLevel < LevelLoader.TOTAL_LEVELS) {
+            currentLevel++;
+            restartLevel();
+        }
+    }
+
+
+    // Goes back to the previous level.
+    public void previousLevel() {
+        if (currentLevel > 1) {
+            currentLevel--;
+            restartLevel();
+        }
+    }
+
+    // Unused interface methods
     @Override public void mousePressed(MouseEvent e)  {}
     @Override public void mouseReleased(MouseEvent e) {}
     @Override public void mouseEntered(MouseEvent e)  {}
     @Override public void mouseExited(MouseEvent e)   {}
+    @Override public void keyTyped(KeyEvent e)        {}
+    @Override public void keyReleased(KeyEvent e)     {}
 
-    public GameBoard getBoard() { return board; }
+    public int getCurrentLevel() { return currentLevel; }
+    public int getMoveCount()    { return moveCount; }
+    public GameBoard getBoard()  { return board; }
 }
