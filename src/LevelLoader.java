@@ -1,27 +1,24 @@
 /**
- * Responsible for loading level data onto the GameBoard.
- * Each level is defined by its piece positions according to levels pdf file.
+ * Loads level data onto the GameBoard.
+ * Grid is 5 columns (0-4) x 4 rows (0-3). Row 0 = top, Col 0 = left.
+ * Each level is one case
  */
 public class LevelLoader {
 
-    /**
-     * Loads the specified level number onto the given board.
-     * Clears the board first, then places all pieces.
-     */
     public static void loadLevel(GameBoard board, int levelNumber) {
         board.clearBoard();
 
         switch (levelNumber) {
 
             case 1:
-                // Level 1
+                // Starter level 1
                 board.addPiece(new Piece(PieceType.SNOWBALL_SMALL, 0, 1, "none"));
                 board.addPiece(new Piece(PieceType.HEAD,           3, 1, "blue"));
                 board.addPiece(new Piece(PieceType.SNOWBALL_LARGE, 3, 3, "none"));
                 break;
 
             case 2:
-                // Level 2
+                // Starter level 2
                 board.addPiece(new Piece(PieceType.SNOWBALL_LARGE, 1, 0, "none"));
                 board.addPiece(new Piece(PieceType.TREE,           1, 1, "none"));
                 board.addPiece(new Piece(PieceType.HEAD,           1, 3, "yellow"));
@@ -29,7 +26,7 @@ public class LevelLoader {
                 break;
 
             case 3:
-                // Level 3
+                // Starter level 3
                 board.addPiece(new Piece(PieceType.TREE,           0, 0, "none"));
                 board.addPiece(new Piece(PieceType.SNOWBALL_SMALL, 0, 2, "none"));
                 board.addPiece(new Piece(PieceType.SNOWBALL_LARGE, 1, 2, "none"));

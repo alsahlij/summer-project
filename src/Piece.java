@@ -57,6 +57,9 @@ public class Piece {
     public void setType(PieceType type) {
         this.type = type;
     }
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
 
     @Override
     public String toString() {

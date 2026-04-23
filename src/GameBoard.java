@@ -51,7 +51,7 @@ public class GameBoard {
         for (Piece p : pieces) {
             if (p.getType() == PieceType.SNOWBALL_LARGE) return false;
             if (p.getType() == PieceType.SNOWBALL_SMALL) return false;
-            if (p.getType() == PieceType.HEAD) return false;
+            if (p.getType() == PieceType.HEAD && !p.isStacked()) return false;
         }
         return true;
     }
@@ -106,5 +106,70 @@ public class GameBoard {
             newRow += dRow;
             newCol += dCol;
         }
+    }
+
+    // Applies stacking rules for adjacent pieces.
+    public void checkAndApplyStacking() {
+        boolean changed = true;
+
+        // Repeat until no more stacking occurs
+        while (changed) {
+            changed = false;
+
+            for (Piece piece : pieces) {
+
+                // Small snowball large snowball
+                if (piece.getType() == PieceType.SNOWBALL_SMALL && !piece.isStacked()) {
+                    Piece adjacent = findAdjacentOfType(piece, PieceType.SNOWBALL_LARGE);
+                    if (adjacent != null && !adjacent.isStacked()) {
+                        adjacent.setStacked(true);
+                        pieces.remove(piece);
+                        changed = true;
+                        break; // list changed, restart
+                    }
+                }
+
+                // Head -> stacked large snowball
+                if (piece.getType() == PieceType.HEAD && !piece.isStacked()) {
+                    Piece adjacent = findAdjacentStackedLarge(piece);
+                    if (adjacent != null) {
+                        adjacent.setType(PieceType.HEAD);
+                        adjacent.setColour(piece.getColour());
+                        adjacent.setStacked(true);
+                        pieces.remove(piece);
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
+    // Returns adjacent piece of given type (4 directions).
+    private Piece findAdjacentOfType(Piece piece, PieceType type) {
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
+        for (int[] d : directions) {
+            Piece neighbour = getPieceAt(piece.getRow() + d[0], piece.getCol() + d[1]);
+            if (neighbour != null && neighbour.getType() == type) {
+                return neighbour;
+            }
+        }
+        return null;
+    }
+
+
+    // Returns adjacent stacked large snowball
+    private Piece findAdjacentStackedLarge(Piece piece) {
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
+        for (int[] d : directions) {
+            Piece neighbour = getPieceAt(piece.getRow() + d[0], piece.getCol() + d[1]);
+            if (neighbour != null
+                    && neighbour.getType() == PieceType.SNOWBALL_LARGE
+                    && neighbour.isStacked()) {
+                return neighbour;
+            }
+        }
+        return null;
     }
 }
