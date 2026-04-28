@@ -4,6 +4,7 @@
  * Each level is one case
  */
 public class LevelLoader {
+    public static final int TOTAL_LEVELS = 3;
 
     public static void loadLevel(GameBoard board, int levelNumber) {
         board.clearBoard();
