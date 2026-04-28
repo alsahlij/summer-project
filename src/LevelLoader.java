@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class LevelLoader {
 
-    public static final int TOTAL_LEVELS = 16;
+    public static final int TOTAL_LEVELS = 80;
     private static final String LEVELS_FILE = "resources/levels.txt";
 
     // Cache all levels after first load so we don't re-read file every time

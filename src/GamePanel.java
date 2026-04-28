@@ -15,15 +15,17 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
 
     private static final int BOARD_WIDTH  = GameBoard.COLS * CELL_SIZE;
     private static final int BOARD_HEIGHT = GameBoard.ROWS * CELL_SIZE;
-    private static final int INFO_HEIGHT  = 60;
+    private static final int INFO_HEIGHT  = 80;
 
     private GameBoard board;
     private Map<String, Image> images;
     private Piece selectedPiece;
     private boolean gameOver;
     private boolean gameWon;
+    private boolean newBestScore;
     private int currentLevel;
     private int moveCount;
+    private HighScoreManager highScoreManager;
 
     public GamePanel() {
         setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + INFO_HEIGHT));
@@ -36,9 +38,12 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
         moveCount     = 0;
         gameOver      = false;
         gameWon       = false;
+        newBestScore  = false;
         selectedPiece = null;
 
         board = new GameBoard();
+        highScoreManager = new HighScoreManager();
+
         LevelLoader.loadLevel(board, currentLevel);
 
         addMouseListener(this);
@@ -119,31 +124,43 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
         }
 
         // Info bar
-        g.setColor(Color.WHITE);
+        g.setColor(new Color(240, 240, 240));
         g.fillRect(0, BOARD_HEIGHT, BOARD_WIDTH, INFO_HEIGHT);
 
         // Draw level and moves
         g.setColor(Color.DARK_GRAY);
         g.setFont(new Font("Arial", Font.BOLD, 18));
-        g.drawString("Level: " + currentLevel, 20, BOARD_HEIGHT + 38);
-        g.drawString("Moves: " + moveCount,   170, BOARD_HEIGHT + 38);
+        g.drawString("Level: " + currentLevel, 20, BOARD_HEIGHT + 28);
+        g.drawString("Moves: " + moveCount,    180, BOARD_HEIGHT + 28);
 
-        // Status messages
+        // Best score display
+        int best = highScoreManager.getBestScore(currentLevel);
+        if (best != -1) {
+            g.setColor(new Color(0, 120, 0));
+            g.drawString("Best: " + best, 340, BOARD_HEIGHT + 28);
+        } else {
+            g.setColor(Color.GRAY);
+            g.drawString("Best: --", 340, BOARD_HEIGHT + 28);
+        }
+
+        // Bottom row: hints and controls
         g.setFont(new Font("Arial", Font.PLAIN, 13));
+        g.setColor(Color.DARK_GRAY);
+
         if (gameOver) {
             drawMessage(g, "Game Over! Snowball fell off!", Color.RED);
-            g.setColor(Color.DARK_GRAY);
-            g.drawString("R = Restart", 330, BOARD_HEIGHT + 38);
+            g.drawString("R = Restart  |  P = Previous Level", 20, BOARD_HEIGHT + 62);
         } else if (gameWon) {
-            drawMessage(g, "You Win! Well done!", new Color(0, 150, 0));
-            g.setColor(new Color(0, 130, 0));
-            g.drawString("R = Restart  |  N = Next Level", 290, BOARD_HEIGHT + 38);
+            if (newBestScore) {
+                drawMessage(g, "You Win!  New Best: " + moveCount + " moves!", new Color(0, 140, 0));
+            } else {
+                drawMessage(g, "You Win!  Moves: " + moveCount + "  (Best: " + best + ")", new Color(0, 140, 0));
+            }
+            g.drawString("R = Restart  |  N = Next Level  |  P = Previous", 20, BOARD_HEIGHT + 62);
         } else if (selectedPiece != null) {
-            g.setColor(Color.DARK_GRAY);
-            g.drawString("Click a direction to move  |  R = Restart", 270, BOARD_HEIGHT + 38);
+            g.drawString("Click direction to move  |  R = Restart  |  N/P = Change Level", 20, BOARD_HEIGHT + 62);
         } else {
-            g.setColor(Color.DARK_GRAY);
-            g.drawString("Click a snowball to select  |  R = Restart", 270, BOARD_HEIGHT + 38);
+            g.drawString("Click a snowball to select  |  R = Restart  |  N/P = Change Level", 20, BOARD_HEIGHT + 62);
         }
     }
 
@@ -152,10 +169,10 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
         g.setColor(new Color(0, 0, 0, 150));
         g.fillRect(0, BOARD_HEIGHT / 2 - 40, BOARD_WIDTH, 80);
         g.setColor(colour);
-        g.setFont(new Font("Arial", Font.BOLD, 22));
+        g.setFont(new Font("Arial", Font.BOLD, 20));
         FontMetrics fm = g.getFontMetrics();
         int x = (BOARD_WIDTH - fm.stringWidth(message)) / 2;
-        g.drawString(message, x, BOARD_HEIGHT / 2 + 10);
+        g.drawString(message, x, BOARD_HEIGHT / 2 + 8);
     }
 
     // Mouse Input
@@ -208,26 +225,32 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
             return;
         }
 
+        // Determine dominant direction from click position
         int direction;
         if (Math.abs(dRow) >= Math.abs(dCol)) {
-            direction = (dRow > 0) ? 1 : 0;
+            direction = (dRow > 0) ? 1 : 0; // DOWN or UP
         } else {
-            direction = (dCol > 0) ? 3 : 2;
+            direction = (dCol > 0) ? 3 : 2; // RIGHT or LEFT
         }
 
-        boolean success = board.movePiece(selectedPiece, direction);
+        Piece pieceToMove = selectedPiece;
         selectedPiece = null;
+
+        boolean success = board.movePiece(pieceToMove, direction);
         moveCount++;
 
         if (!success) {
             gameOver = true;
         } else {
-            // Check stacking after every move
-            board.checkAndApplyStacking();
+            board.checkAndApplyStacking(pieceToMove);
             if (board.checkWin()) {
                 gameWon = true;
+                // Save score - returns true if new best
+                newBestScore = highScoreManager.submitScore(currentLevel, moveCount);
             }
         }
+
+        repaint();
     }
 
     // Keyboard Input
@@ -235,24 +258,15 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_R) {
-            restartLevel();
-        }
-
-        if (key == KeyEvent.VK_N) {
-            nextLevel();
-        }
-
-        if (key == KeyEvent.VK_P) {
-            previousLevel();
-        }
+        if (key == KeyEvent.VK_R) restartLevel();
+        if (key == KeyEvent.VK_N) nextLevel();
+        if (key == KeyEvent.VK_P) previousLevel();
     }
 
-    // Reset current level state
     public void restartLevel() {
         gameOver      = false;
         gameWon       = false;
+        newBestScore  = false;
         selectedPiece = null;
         moveCount     = 0;
         LevelLoader.loadLevel(board, currentLevel);
