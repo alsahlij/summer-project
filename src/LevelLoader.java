@@ -1,43 +1,91 @@
+import java.io.*;
+import java.util.*;
+
 /**
- * Loads level data onto the GameBoard.
- * Grid is 5 columns (0-4) x 4 rows (0-3). Row 0 = top, Col 0 = left.
- * Each level is one case
+ * Loads level data from resources/levels.txt into the GameBoard.
+ * Each level is defined in a simple text format to promote easy addition or editing of levels.
+ * Format: LEVEL n / PIECE row col colour / END
  */
 public class LevelLoader {
-    public static final int TOTAL_LEVELS = 3;
+
+    public static final int TOTAL_LEVELS = 16;
+    private static final String LEVELS_FILE = "resources/levels.txt";
+
+    // Cache all levels after first load so we don't re-read file every time
+    private static Map<Integer, List<String[]>> levelCache = null;
 
     public static void loadLevel(GameBoard board, int levelNumber) {
         board.clearBoard();
 
-        switch (levelNumber) {
-
-            case 1:
-                // Starter level 1
-                board.addPiece(new Piece(PieceType.SNOWBALL_SMALL, 0, 1, "none"));
-                board.addPiece(new Piece(PieceType.HEAD,           3, 1, "blue"));
-                board.addPiece(new Piece(PieceType.SNOWBALL_LARGE, 3, 3, "none"));
-                break;
-
-            case 2:
-                // Starter level 2
-                board.addPiece(new Piece(PieceType.SNOWBALL_LARGE, 1, 0, "none"));
-                board.addPiece(new Piece(PieceType.TREE,           1, 1, "none"));
-                board.addPiece(new Piece(PieceType.HEAD,           1, 3, "yellow"));
-                board.addPiece(new Piece(PieceType.SNOWBALL_SMALL, 2, 3, "none"));
-                break;
-
-            case 3:
-                // Starter level 3
-                board.addPiece(new Piece(PieceType.TREE,           0, 0, "none"));
-                board.addPiece(new Piece(PieceType.SNOWBALL_SMALL, 0, 2, "none"));
-                board.addPiece(new Piece(PieceType.SNOWBALL_LARGE, 1, 2, "none"));
-                board.addPiece(new Piece(PieceType.HEAD,           2, 1, "red"));
-                board.addPiece(new Piece(PieceType.TREE,           3, 1, "none"));
-                break;
-
-            default:
-                System.out.println("Level " + levelNumber + " not yet implemented.");
-                break;
+        if (levelCache == null) {
+            levelCache = parseLevelsFile();
         }
+
+        List<String[]> pieces = levelCache.get(levelNumber);
+        if (pieces == null) {
+            System.out.println("Level " + levelNumber + " not found in levels.txt");
+            return;
+        }
+
+        for (String[] parts : pieces) {
+            String type   = parts[0];
+            int row       = Integer.parseInt(parts[1]);
+            int col       = Integer.parseInt(parts[2]);
+            String colour = parts[3];
+
+            PieceType pieceType;
+            switch (type) {
+                case "SMALL": pieceType = PieceType.SNOWBALL_SMALL; break;
+                case "LARGE": pieceType = PieceType.SNOWBALL_LARGE; break;
+                case "HEAD":  pieceType = PieceType.HEAD;           break;
+                case "TREE":  pieceType = PieceType.TREE;           break;
+                default:
+                    System.out.println("Unknown piece type: " + type);
+                    continue;
+            }
+
+            board.addPiece(new Piece(pieceType, row, col, colour));
+        }
+    }
+
+    // Parses the levels.txt file and returns a map of level number to piece data.
+    private static Map<Integer, List<String[]>> parseLevelsFile() {
+        Map<Integer, List<String[]>> allLevels = new HashMap<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(LEVELS_FILE))) {
+            String line;
+            int currentLevel = -1;
+            List<String[]> currentPieces = null;
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+
+                // Skip comments and blank lines
+                if (line.startsWith("#") || line.isEmpty()) continue;
+
+                if (line.startsWith("LEVEL")) {
+                    currentLevel = Integer.parseInt(line.split(" ")[1]);
+                    currentPieces = new ArrayList<>();
+                } else if (line.equals("END")) {
+                    if (currentLevel != -1 && currentPieces != null) {
+                        allLevels.put(currentLevel, currentPieces);
+                    }
+                    currentLevel = -1;
+                } else {
+                    // Piece line: TYPE row col colour
+                    if (currentPieces != null) {
+                        String[] parts = line.split(" ");
+                        if (parts.length == 4) {
+                            currentPieces.add(parts);
+                        }
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading levels file: " + e.getMessage());
+        }
+
+        return allLevels;
     }
 }

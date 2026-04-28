@@ -1,0 +1,135 @@
+# Snow Problem - Level Data
+# Format per level:
+# LEVEL <number>
+# <piece> <row> <col> <colour>
+# Pieces: SMALL, LARGE, HEAD, TREE
+# Colours: blue, red, yellow, none
+# END
+
+LEVEL 1
+SMALL 0 1 none
+HEAD 3 0 blue
+LARGE 3 4 none
+END
+
+LEVEL 2
+LARGE 1 0 none
+TREE 2 1 none
+HEAD 1 3 yellow
+SMALL 2 4 none
+END
+
+LEVEL 3
+TREE 0 0 none
+LARGE 0 3 none
+SMALL 1 3 none
+HEAD 2 4 red
+TREE 3 1 none
+END
+
+LEVEL 4
+TREE 0 0 none
+SMALL 0 4 none
+HEAD 3 0 yellow
+LARGE 3 4 none
+END
+
+LEVEL 5
+TREE 0 0 none
+TREE 0 2 none
+TREE 0 4 none
+HEAD 1 2 blue
+SMALL 3 0 none
+LARGE 3 4 none
+END
+
+LEVEL 6
+TREE 0 2 none
+HEAD 1 0 blue
+LARGE 1 3 none
+SMALL 1 1 none
+TREE 3 2 none
+END
+
+LEVEL 7
+TREE 1 1 none
+TREE 1 2 none
+HEAD 2 4 red
+SMALL 3 0 none
+LARGE 3 2 none
+END
+
+LEVEL 8
+TREE 0 1 none
+LARGE 0 4 none
+SMALL 0 3 none
+TREE 2 4 none
+HEAD 3 2 blue
+END
+
+LEVEL 9
+TREE 0 0 none
+LARGE 0 2 none
+HEAD 1 3 red
+TREE 2 3 none
+SMALL 3 1 none
+END
+
+LEVEL 10
+TREE 0 0 none
+TREE 0 1 none
+TREE 0 2 none
+HEAD 1 3 red
+SMALL 3 2 none
+LARGE 3 4 none
+END
+
+LEVEL 11
+TREE 0 0 none
+TREE 0 1 none
+HEAD 0 3 yellow
+SMALL 2 0 none
+TREE 2 2 none
+LARGE 3 0 none
+END
+
+LEVEL 12
+TREE 0 0 none
+LARGE 0 1 none
+TREE 0 4 none
+HEAD 2 1 blue
+SMALL 2 3 none
+END
+
+LEVEL 13
+TREE 0 0 none
+LARGE 0 2 none
+TREE 1 0 none
+HEAD 1 3 red
+SMALL 3 2 none
+END
+
+LEVEL 14
+TREE 0 1 none
+TREE 1 2 none
+LARGE 2 0 none
+HEAD 2 3 red
+SMALL 2 4 none
+END
+
+LEVEL 15
+TREE 0 0 none
+TREE 0 1 none
+HEAD 1 3 blue
+SMALL 2 0 none
+LARGE 3 2 none
+END
+
+LEVEL 16
+TREE 0 0 none
+TREE 0 1 none
+HEAD 1 3 blue
+SMALL 2 0 none
+TREE 3 2 none
+LARGE 3 4 none
+END
