@@ -109,42 +109,69 @@ public class GameBoard {
     }
 
     // Applies stacking rules for adjacent pieces.
-    public void checkAndApplyStacking() {
-        boolean changed = true;
+    public void checkAndApplyStacking(Piece movedPiece) {
+        if (movedPiece == null) return;
 
-        // Repeat until no more stacking occurs
-        while (changed) {
-            changed = false;
+        if (movedPiece.getType() == PieceType.SNOWBALL_SMALL && !movedPiece.isStacked()) {
+            Piece adjacentLarge = findAdjacentOfType(movedPiece, PieceType.SNOWBALL_LARGE);
+            if (adjacentLarge != null && !adjacentLarge.isStacked()) {
+                // Merge: remove small, mark large as stacked (shows snowman_stack image)
+                pieces.remove(movedPiece);
+                adjacentLarge.setStacked(true);
 
-            for (Piece piece : pieces) {
-
-                // Small snowball large snowball
-                if (piece.getType() == PieceType.SNOWBALL_SMALL && !piece.isStacked()) {
-                    Piece adjacent = findAdjacentOfType(piece, PieceType.SNOWBALL_LARGE);
-                    if (adjacent != null && !adjacent.isStacked()) {
-                        adjacent.setStacked(true);
-                        pieces.remove(piece);
-                        changed = true;
-                        break; // list changed, restart
-                    }
-                }
-
-                // Head -> stacked large snowball
-                if (piece.getType() == PieceType.HEAD && !piece.isStacked()) {
-                    Piece adjacent = findAdjacentStackedLarge(piece);
-                    if (adjacent != null) {
-                        adjacent.setType(PieceType.HEAD);
-                        adjacent.setColour(piece.getColour());
-                        adjacent.setStacked(true);
-                        pieces.remove(piece);
-                        changed = true;
-                        break;
-                    }
-                }
+                checkHeadStacking(adjacentLarge);
+                return;
             }
+        }
+
+        if (movedPiece.getType() == PieceType.SNOWBALL_LARGE && !movedPiece.isStacked()) {
+            Piece adjacentSmall = findAdjacentOfType(movedPiece, PieceType.SNOWBALL_SMALL);
+            if (adjacentSmall != null && !adjacentSmall.isStacked()) {
+                // Merge: remove small, mark large as stacked
+                pieces.remove(adjacentSmall);
+                movedPiece.setStacked(true);
+
+                checkHeadStacking(movedPiece);
+                return;
+            }
+        }
+
+        if (movedPiece.getType() == PieceType.HEAD && !movedPiece.isStacked()) {
+            checkHeadStacking(movedPiece);
         }
     }
 
+
+    // Checks if any head is adjacent to the given stack piece.
+    private void checkHeadStacking(Piece stackPiece) {
+        // stackPiece is the large snowball that is now stacked
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
+        for (int[] d : directions) {
+            int nr = stackPiece.getRow() + d[0];
+            int nc = stackPiece.getCol() + d[1];
+            Piece neighbour = getPieceAt(nr, nc);
+            if (neighbour != null && neighbour.getType() == PieceType.HEAD
+                    && !neighbour.isStacked()) {
+                // Complete the snowman
+                stackPiece.setType(PieceType.HEAD);
+                stackPiece.setColour(neighbour.getColour());
+                stackPiece.setStacked(true);
+                pieces.remove(neighbour);
+                return;
+            }
+        }
+
+        // Also check if the moved head is itself adjacent to a stack
+        if (stackPiece.getType() == PieceType.HEAD) {
+            Piece adjacentStack = findAdjacentStackedLarge(stackPiece);
+            if (adjacentStack != null) {
+                adjacentStack.setType(PieceType.HEAD);
+                adjacentStack.setColour(stackPiece.getColour());
+                adjacentStack.setStacked(true);
+                pieces.remove(stackPiece);
+            }
+        }
+    }
 
     // Returns adjacent piece of given type (4 directions).
     private Piece findAdjacentOfType(Piece piece, PieceType type) {

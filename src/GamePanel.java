@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +27,11 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
     private int currentLevel;
     private int moveCount;
     private HighScoreManager highScoreManager;
+    private PuzzleSolver solver;
+    private List<int[]> solutionMoves;
+    private int solutionStep;
+    private boolean showingSolution;
+    private javax.swing.Timer solutionTimer;
 
     public GamePanel() {
         setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT + INFO_HEIGHT));
@@ -34,15 +40,19 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
         images = new HashMap<>();
         loadImages();
 
-        currentLevel  = 1;
-        moveCount     = 0;
-        gameOver      = false;
-        gameWon       = false;
-        newBestScore  = false;
-        selectedPiece = null;
+        currentLevel    = 1;
+        moveCount       = 0;
+        gameOver        = false;
+        gameWon         = false;
+        newBestScore    = false;
+        selectedPiece   = null;
+        solutionMoves   = null;
+        solutionStep    = 0;
+        showingSolution = false;
 
-        board = new GameBoard();
+        board            = new GameBoard();
         highScoreManager = new HighScoreManager();
+        solver           = new PuzzleSolver();
 
         LevelLoader.loadLevel(board, currentLevel);
 
@@ -147,9 +157,14 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
         g.setFont(new Font("Arial", Font.PLAIN, 13));
         g.setColor(Color.DARK_GRAY);
 
-        if (gameOver) {
+        if (showingSolution) {
+            drawMessage(g, "Solving...", new Color(0, 100, 200));
+            g.drawString("Solver is running - please wait", 20, BOARD_HEIGHT + 62);
+
+        } else if (gameOver) {
             drawMessage(g, "Game Over! Snowball fell off!", Color.RED);
             g.drawString("R = Restart  |  P = Previous Level", 20, BOARD_HEIGHT + 62);
+
         } else if (gameWon) {
             if (newBestScore) {
                 drawMessage(g, "You Win!  New Best: " + moveCount + " moves!", new Color(0, 140, 0));
@@ -157,10 +172,12 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
                 drawMessage(g, "You Win!  Moves: " + moveCount + "  (Best: " + best + ")", new Color(0, 140, 0));
             }
             g.drawString("R = Restart  |  N = Next Level  |  P = Previous", 20, BOARD_HEIGHT + 62);
+
         } else if (selectedPiece != null) {
-            g.drawString("Click direction to move  |  R = Restart  |  N/P = Change Level", 20, BOARD_HEIGHT + 62);
+            g.drawString("Click direction to move  |  R = Restart  |  N/P = Level  |  S = Solve", 20, BOARD_HEIGHT + 62);
+
         } else {
-            g.drawString("Click a snowball to select  |  R = Restart  |  N/P = Change Level", 20, BOARD_HEIGHT + 62);
+            g.drawString("Click snowball to select  |  R = Restart  |  N/P = Level  |  S = Solve", 20, BOARD_HEIGHT + 62);
         }
     }
 
@@ -178,8 +195,10 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
     // Mouse Input
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Always re-grab focus on click
         requestFocusInWindow();
+
+        // Ignore clicks while solver is animating
+        if (showingSolution) return;
 
         if (gameOver || gameWon) {
             restartLevel();
@@ -261,9 +280,94 @@ public class GamePanel extends JPanel implements MouseListener, KeyListener {
         if (key == KeyEvent.VK_R) restartLevel();
         if (key == KeyEvent.VK_N) nextLevel();
         if (key == KeyEvent.VK_P) previousLevel();
+        if (key == KeyEvent.VK_S) startSolver();
     }
 
+    // Puzzle Solver
+
+    /**
+     * Runs the puzzle solver in a background thread then animates the solution.
+     * Press S to activate. Resets the level first so it always solves from start.
+     */
+    private void startSolver() {
+        if (showingSolution) return;
+
+        // Stop any existing timer
+        if (solutionTimer != null) solutionTimer.stop();
+
+        // Reset level to starting state
+        restartLevel();
+
+        // Show solving indicator
+        showingSolution = true;
+        repaint();
+
+        // Run solver in background thread so UI stays responsive
+        new Thread(() -> {
+            List<int[]> result = solver.solve(board);
+
+            // Return to UI thread to animate result
+            SwingUtilities.invokeLater(() -> {
+                showingSolution = false;
+
+                if (result == null || result.isEmpty()) {
+                    JOptionPane.showMessageDialog(this,
+                            "No solution found within search limit.\n" +
+                                    "Check level positions are correct.",
+                            "Solver Result",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+
+                solutionMoves = result;
+                solutionStep  = 0;
+
+                // Animate: apply one move every 800 milliseconds
+                solutionTimer = new javax.swing.Timer(800, evt -> {
+                    if (solutionStep >= solutionMoves.size()) {
+                        solutionTimer.stop();
+                        return;
+                    }
+
+                    int[] move    = solutionMoves.get(solutionStep);
+                    int moveRow   = move[0];
+                    int moveCol   = move[1];
+                    int moveDir   = move[2];
+
+                    Piece piece = board.getPieceAt(moveRow, moveCol);
+                    if (piece != null && !piece.isStacked()) {
+                        boolean ok = board.movePiece(piece, moveDir);
+                        if (ok) {
+                            board.checkAndApplyStacking(piece);
+                            moveCount++;
+                            if (board.checkWin()) {
+                                gameWon      = true;
+                                newBestScore = highScoreManager.submitScore(currentLevel, moveCount);
+                                solutionTimer.stop();
+                            }
+                        }
+                    }
+
+                    solutionStep++;
+                    repaint();
+                });
+
+                solutionTimer.start();
+            });
+        }).start();
+    }
+
+    // Level Management
+
+
+    // Restarts the current level from scratch.
     public void restartLevel() {
+        // Stop solver if running
+        if (solutionTimer != null) solutionTimer.stop();
+        showingSolution = false;
+        solutionMoves   = null;
+        solutionStep    = 0;
+
         gameOver      = false;
         gameWon       = false;
         newBestScore  = false;
