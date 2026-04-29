@@ -69,18 +69,18 @@ END
 
 LEVEL 9
 TREE 0 0 none
-LARGE 0 2 none
+SMALL 0 2 none
 HEAD 1 3 red
-TREE 2 3 none
-SMALL 3 1 none
+LARGE 3 1 none
+TREE 3 4 none
 END
 
 LEVEL 10
 TREE 0 0 none
-TREE 0 1 none
 TREE 0 2 none
-HEAD 1 3 red
-SMALL 3 2 none
+TREE 1 1 none
+HEAD 2 3 red
+SMALL 3 1 none
 LARGE 3 4 none
 END
 
@@ -89,7 +89,7 @@ TREE 0 0 none
 TREE 0 1 none
 HEAD 0 3 yellow
 SMALL 2 0 none
-TREE 2 2 none
+TREE 2 4 none
 LARGE 3 0 none
 END
 
@@ -103,33 +103,737 @@ END
 
 LEVEL 13
 TREE 0 0 none
-LARGE 0 2 none
-TREE 1 0 none
-HEAD 1 3 red
-SMALL 3 2 none
+SMALL 0 2 none
+HEAD 1 4 red
+TREE 2 1 none
+LARGE 3 4 none
 END
 
 LEVEL 14
 TREE 0 1 none
-TREE 1 2 none
-LARGE 2 0 none
-HEAD 2 3 red
-SMALL 2 4 none
+TREE 1 3 none
+LARGE 3 4 none
+HEAD 3 2 red
+SMALL 2 0 none
 END
 
 LEVEL 15
 TREE 0 0 none
 TREE 0 1 none
-HEAD 1 3 blue
-SMALL 2 0 none
-LARGE 3 2 none
+SMALL 0 4 none
+HEAD 1 4 blue
+LARGE 2 0 none
+TREE 3 2 none
 END
 
 LEVEL 16
 TREE 0 0 none
 TREE 0 1 none
-HEAD 1 3 blue
+HEAD 1 4 blue
 SMALL 2 0 none
-TREE 3 2 none
+LARGE 3 0 none
+TREE 3 1 none
+END
+
+LEVEL 17
+TREE 0 1 none
+TREE 1 4 none
+TREE 2 0 none
+SMALL 2 3 none
+HEAD 3 3 red
 LARGE 3 4 none
+END
+
+LEVEL 18
+TREE 0 2 none
+SMALL 0 3 none
+LARGE 0 4 none
+TREE 1 0 none
+TREE 2 3 none
+HEAD 3 1 blue
+END
+
+LEVEL 19
+TREE 0 2 none
+TREE 1 0 none
+TREE 1 4 none
+SMALL 0 4 none
+HEAD 2 1 yellow
+LARGE 3 3 none
+END
+
+LEVEL 20
+TREE 0 1 none
+HEAD 1 3 yellow
+LARGE 2 0 none
+TREE 3 2 none
+SMALL 3 4 none
+END
+
+LEVEL 21
+HEAD 0 3 blue
+TREE 1 0 none
+TREE 2 4 none
+SMALL 3 0 none
+LARGE 3 2 none
+END
+
+LEVEL 22
+TREE 0 1 none
+TREE 1 0 none
+TREE 3 2 none
+HEAD 2 0 blue
+SMALL 0 3 none
+LARGE 3 4 none
+END
+
+LEVEL 23
+TREE 0 2 none
+TREE 1 0 none
+TREE 2 1 none
+HEAD 1 4 blue
+LARGE 3 0 none
+SMALL 3 4 none
+END
+
+LEVEL 24
+TREE 1 0 none
+TREE 1 4 none
+TREE 2 1 none
+HEAD 0 2 blue
+SMALL 3 1 none
+LARGE 3 4 none
+END
+
+LEVEL 25
+TREE 0 0 none
+TREE 0 2 none
+TREE 3 1 none
+HEAD 2 3 blue
+SMALL 0 4 none
+LARGE 3 0 none
+END
+
+LEVEL 26
+TREE 0 0 none
+TREE 1 4 none
+TREE 2 0 none
+HEAD 3 3 red
+SMALL 3 0 none
+LARGE 0 2 none
+END
+
+LEVEL 27
+TREE 0 1 none
+TREE 1 4 none
+TREE 3 2 none
+HEAD 2 0 red
+SMALL 0 4 none
+LARGE 3 3 none
+END
+
+LEVEL 28
+TREE 0 0 none
+TREE 1 4 none
+HEAD 3 3 blue
+SMALL 2 0 none
+LARGE 3 0 none
+END
+
+LEVEL 29
+HEAD 1 1 yellow
+HEAD 1 3 blue
+LARGE 2 0 none
+SMALL 2 1 none
+SMALL 2 3 none
+LARGE 2 4 none
+END
+
+LEVEL 30
+HEAD 0 0 red
+TREE 0 2 none
+SMALL 0 4 none
+HEAD 3 0 yellow
+SMALL 2 3 none
+TREE 3 2 none
+LARGE 1 0 none
+LARGE 3 1 none
+END
+
+LEVEL 31
+SMALL 0 0 none
+HEAD 0 2 blue
+LARGE 0 4 none
+TREE 1 0 none
+HEAD 1 2 red
+SMALL 2 4 none
+SMALL 3 2 none
+END
+
+LEVEL 32
+HEAD 0 2 red
+SMALL 3 0 none
+LARGE 0 4 none
+TREE 1 1 none
+HEAD 1 3 yellow
+TREE 2 2 none
+LARGE 3 2 none
+SMALL 3 4 none
+END
+
+LEVEL 33
+HEAD 1 0 red
+HEAD 1 2 yellow
+LARGE 0 0 none
+SMALL 0 4 none
+SMALL 3 1 none
+LARGE 3 4 none
+END
+
+LEVEL 34
+TREE 1 0 none
+TREE 2 0 none
+HEAD 0 2 blue
+HEAD 2 3 yellow
+LARGE 0 0 none
+SMALL 0 3 none
+LARGE 0 4 none
+SMALL 3 3 none
+END
+
+LEVEL 35
+TREE 0 0 none
+TREE 0 2 none
+HEAD 0 4 yellow
+HEAD 3 3 red
+LARGE 0 3 none
+SMALL 2 4 none
+LARGE 3 0 none
+SMALL 3 1 none
+END
+
+LEVEL 36
+TREE 1 1 none
+TREE 2 2 none
+HEAD 0 2 yellow
+HEAD 1 0 red
+LARGE 0 0 none
+SMALL 0 4 none
+LARGE 3 0 none
+SMALL 3 4 none
+END
+
+LEVEL 37
+HEAD 0 0 yellow
+HEAD 1 3 blue
+TREE 1 1 none
+TREE 2 3 none
+LARGE 0 2 none
+SMALL 0 4 none
+LARGE 3 0 none
+SMALL 3 2 none
+END
+
+LEVEL 38
+HEAD 1 1 yellow
+HEAD 1 3 blue
+TREE 1 0 none
+TREE 1 4 none
+LARGE 0 0 none
+LARGE 0 1 none
+SMALL 0 3 none
+SMALL 3 2 none
+END
+
+LEVEL 39
+HEAD 0 0 blue
+HEAD 3 2 red
+TREE 1 2 none
+SMALL 1 0 none
+LARGE 0 3 none
+SMALL 2 4 none
+LARGE 3 0 none
+END
+
+LEVEL 40
+HEAD 0 1 blue
+HEAD 1 0 red
+TREE 0 0 none
+TREE 3 3 none
+LARGE 0 3 none
+SMALL 0 4 none
+SMALL 1 2 none
+LARGE 3 0 none
+END
+
+LEVEL 41
+HEAD 1 2 blue
+HEAD 2 2 yellow
+LARGE 0 0 none
+SMALL 0 4 none
+SMALL 2 0 none
+LARGE 3 0 none
+END
+
+LEVEL 42
+HEAD 1 1 red
+HEAD 2 2 yellow
+LARGE 0 0 none
+SMALL 0 4 none
+LARGE 2 0 none
+SMALL 2 4 none
+END
+
+LEVEL 43
+HEAD 0 1 blue
+HEAD 3 2 red
+TREE 0 2 none
+SMALL 0 0 none
+SMALL 0 4 none
+LARGE 3 0 none
+LARGE 3 4 none
+END
+
+LEVEL 44
+HEAD 1 2 red
+HEAD 2 2 yellow
+TREE 1 1 none
+TREE 1 3 none
+SMALL 3 0 none
+LARGE 3 3 none
+SMALL 3 4 none
+LARGE 0 4 none
+END
+
+LEVEL 45
+HEAD 1 4 yellow
+HEAD 2 1 blue
+TREE 0 1 none
+TREE 2 3 none
+SMALL 1 0 none
+SMALL 1 2 none
+LARGE 3 0 none
+LARGE 3 4 none
+END
+
+LEVEL 46
+HEAD 0 4 blue
+HEAD 2 1 yellow
+TREE 0 2 none
+TREE 2 0 none
+LARGE 0 0 none
+SMALL 0 1 none
+LARGE 0 3 none
+SMALL 2 4 none
+END
+
+LEVEL 47
+HEAD 0 2 red
+HEAD 3 0 blue
+TREE 1 1 none
+TREE 1 3 none
+LARGE 0 0 none
+SMALL 0 4 none
+SMALL 1 4 none
+LARGE 3 4 none
+END
+
+LEVEL 48
+HEAD 3 1 yellow
+SMALL 3 2 none
+HEAD 3 3 red
+TREE 0 1 none
+TREE 1 4 none
+SMALL 1 1 none
+HEAD 3 3 red
+LARGE 0 4 none
+LARGE 3 4 none
+END
+
+LEVEL 49
+HEAD 1 2 yellow
+HEAD 2 2 red
+HEAD 3 2 blue
+TREE 1 0 none
+TREE 1 3 none
+SMALL 0 0 none
+SMALL 0 1 none
+SMALL 0 2 none
+LARGE 0 3 none
+LARGE 2 1 none
+LARGE 3 4 none
+END
+
+LEVEL 50
+HEAD 0 0 yellow
+HEAD 1 4 blue
+HEAD 3 1 red
+TREE 1 2 none
+TREE 2 2 none
+LARGE 0 1 none
+SMALL 0 2 none
+SMALL 0 4 none
+LARGE 2 0 none
+SMALL 3 2 none
+LARGE 3 4 none
+END
+
+LEVEL 51
+HEAD 0 3 red
+HEAD 1 4 blue
+HEAD 3 3 yellow
+TREE 1 0 none
+TREE 2 2 none
+LARGE 0 0 none
+SMALL 0 1 none
+LARGE 2 0 none
+SMALL 3 0 none
+SMALL 3 1 none
+SMALL 3 2 none
+END
+
+LEVEL 52
+HEAD 1 4 blue
+HEAD 2 3 red
+HEAD 3 2 yellow
+TREE 0 0 none
+LARGE 0 1 none
+LARGE 0 4 none
+SMALL 1 3 none
+SMALL 2 0 none
+SMALL 3 1 none
+LARGE 2 4 none
+END
+
+LEVEL 53
+HEAD 1 1 yellow
+HEAD 1 3 blue
+TREE 0 2 none
+TREE 2 0 none
+LARGE 0 0 none
+SMALL 3 0 none
+SMALL 3 1 none
+LARGE 3 4 none
+END
+
+LEVEL 54
+HEAD 1 4 yellow
+HEAD 2 4 blue
+TREE 1 1 none
+TREE 2 1 none
+LARGE 0 2 none
+SMALL 3 0 none
+SMALL 3 1 none
+LARGE 3 4 none
+END
+
+LEVEL 55
+HEAD 0 2 red
+HEAD 0 3 blue
+TREE 0 1 none
+TREE 3 3 none
+LARGE 0 0 none
+LARGE 0 4 none
+SMALL 3 0 none
+SMALL 3 4 none
+END
+
+LEVEL 56
+HEAD 2 2 yellow
+HEAD 3 1 red
+TREE 0 1 none
+TREE 0 3 none
+SMALL 2 0 none
+SMALL 0 4 none
+LARGE 2 4 none
+LARGE 3 3 none
+END
+
+LEVEL 57
+HEAD 1 3 red
+HEAD 2 4 yellow
+TREE 0 2 none
+TREE 1 0 none
+SMALL 1 2 none
+SMALL 2 1 none
+LARGE 3 0 none
+LARGE 3 4 none
+END
+
+LEVEL 58
+HEAD 1 4 yellow
+HEAD 3 3 red
+TREE 0 0 none
+TREE 2 0 none
+SMALL 0 1 none
+LARGE 2 2 none
+LARGE 3 0 none
+SMALL 3 4 none
+END
+
+LEVEL 59
+HEAD 2 0 red
+HEAD 1 4 blue
+TREE 1 1 none
+TREE 2 3 none
+LARGE 0 0 none
+LARGE 0 3 none
+SMALL 3 1 none
+SMALL 3 4 none
+END
+
+LEVEL 60
+HEAD 0 4 blue
+HEAD 2 0 red
+TREE 1 2 none
+TREE 1 3 none
+SMALL 0 1 none
+LARGE 0 0 none
+SMALL 3 1 none
+LARGE 3 4 none
+END
+
+LEVEL 61
+HEAD 0 0 yellow
+HEAD 0 2 red
+HEAD 1 1 blue
+TREE 1 4 none
+SMALL 0 4 none
+LARGE 1 3 none
+LARGE 2 0 none
+SMALL 2 1 none
+SMALL 2 2 none
+LARGE 3 3 none
+END
+
+LEVEL 62
+HEAD 0 3 yellow
+HEAD 1 4 blue
+HEAD 3 3 red
+TREE 1 1 none
+TREE 2 1 none
+SMALL 0 0 none
+SMALL 0 1 none
+SMALL 0 2 none
+LARGE 1 2 none
+LARGE 1 3 none
+LARGE 3 4 none
+END
+
+LEVEL 63
+HEAD 2 0 red
+HEAD 2 2 yellow
+HEAD 2 4 blue
+TREE 1 2 none
+LARGE 0 2 none
+SMALL 0 4 none
+SMALL 1 4 none
+SMALL 3 0 none
+LARGE 3 2 none
+LARGE 3 4 none
+END
+
+LEVEL 64
+HEAD 0 2 blue
+HEAD 1 1 red
+HEAD 1 3 yellow
+TREE 1 0 none
+TREE 2 4 none
+SMALL 0 0 none
+LARGE 1 4 none
+SMALL 2 3 none
+LARGE 3 0 none
+LARGE 3 1 none
+SMALL 3 4 none
+END
+
+LEVEL 65
+HEAD 0 1 yellow
+HEAD 0 3 blue
+TREE 1 0 none
+TREE 2 4 none
+SMALL 1 1 none
+LARGE 1 2 none
+SMALL 2 2 none
+LARGE 3 2 none
+END
+
+LEVEL 66
+HEAD 0 1 yellow
+HEAD 3 2 red
+SMALL 2 0 none
+LARGE 0 4 none
+SMALL 3 3 none
+LARGE 3 4 none
+END
+
+LEVEL 67
+HEAD 2 0 red
+HEAD 3 2 blue
+TREE 1 0 none
+LARGE 0 1 none
+LARGE 0 4 none
+SMALL 1 4 none
+SMALL 3 3 none
+END
+
+LEVEL 68
+HEAD 0 2 yellow
+HEAD 3 2 red
+TREE 0 0 none
+TREE 1 1 none
+SMALL 1 0 none
+SMALL 0 3 none
+LARGE 2 4 none
+LARGE 3 0 none
+END
+
+LEVEL 69
+HEAD 0 2 red
+HEAD 0 3 blue
+HEAD 2 4 yellow
+TREE 1 1 none
+TREE 2 3 none
+SMALL 1 0 none
+LARGE 0 0 none
+LARGE 0 4 none
+LARGE 3 0 none
+SMALL 3 3 none
+SMALL 3 4 none
+END
+
+LEVEL 70
+HEAD 2 0 red
+HEAD 3 0 yellow
+HEAD 3 3 blue
+TREE 0 1 none
+TREE 1 1 none
+SMALL 0 2 none
+SMALL 0 3 none
+SMALL 1 3 none
+LARGE 1 4 none
+LARGE 2 1 none
+LARGE 3 2 none
+END
+
+LEVEL 71
+HEAD 1 0 yellow
+HEAD 2 0 blue
+HEAD 3 4 red
+TREE 0 2 none
+TREE 1 2 none
+LARGE 0 0 none
+SMALL 0 4 none
+SMALL 1 4 none
+LARGE 2 1 none
+SMALL 2 2 none
+LARGE 3 0 none
+END
+
+LEVEL 72
+HEAD 1 1 red
+HEAD 2 0 blue
+HEAD 2 1 yellow
+TREE 1 0 none
+LARGE 0 0 none
+LARGE 0 1 none
+SMALL 0 3 none
+LARGE 0 4 none
+SMALL 3 2 none
+LARGE 3 4 none
+END
+
+LEVEL 73
+HEAD 0 1 yellow
+HEAD 3 3 blue
+LARGE 2 0 none
+SMALL 0 4 none
+SMALL 2 4 none
+LARGE 3 4 none
+END
+
+LEVEL 74
+HEAD 1 4 red
+HEAD 2 0 blue
+TREE 0 0 none
+TREE 3 3 none
+LARGE 0 1 none
+LARGE 0 2 none
+SMALL 1 1 none
+SMALL 1 2 none
+END
+
+LEVEL 75
+HEAD 1 4 red
+HEAD 2 4 blue
+TREE 0 1 none
+TREE 3 1 none
+SMALL 0 0 none
+SMALL 2 0 none
+LARGE 3 0 none
+LARGE 3 4 none
+END
+
+LEVEL 76
+HEAD 0 3 blue
+HEAD 2 4 red
+TREE 1 0 none
+LARGE 0 0 none
+SMALL 0 4 none
+LARGE 1 2 none
+SMALL 3 1 none
+END
+
+LEVEL 77
+HEAD 1 0 red
+HEAD 3 1 blue
+HEAD 3 3 yellow
+TREE 0 0 none
+TREE 2 2 none
+SMALL 0 1 none
+LARGE 0 3 none
+SMALL 1 4 none
+SMALL 2 3 none
+LARGE 2 4 none
+LARGE 3 4 none
+END
+
+LEVEL 78
+HEAD 0 1 blue
+HEAD 0 2 yellow
+HEAD 0 3 red
+LARGE 0 4 none
+SMALL 2 0 none
+SMALL 3 0 none
+SMALL 3 1 none
+LARGE 3 2 none
+LARGE 2 4 none
+END
+
+LEVEL 79
+HEAD 1 0 red
+HEAD 1 1 blue
+HEAD 2 0 yellow
+TREE 0 0 none
+TREE 0 4 none
+LARGE 0 2 none
+SMALL 1 2 none
+LARGE 2 1 none
+SMALL 2 2 none
+SMALL 3 2 none
+LARGE 3 4 none
+END
+
+LEVEL 80
+HEAD 0 3 blue
+HEAD 3 3 yellow
+HEAD 3 4 red
+TREE 0 1 none
+TREE 2 0 none
+SMALL 0 0 none
+LARGE 1 1 none
+LARGE 1 2 none
+SMALL 1 3 none
+LARGE 1 4 none
+SMALL 2 3 none
 END
